@@ -1,0 +1,31 @@
+// Place all the styles related to the Events controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+*{
+    padding: .25%;
+}
+
+.add_event_box,.add_event_labels,.add_event_boxes{
+    display: inline-block;
+}
+
+.add_event_box{
+    width: 40%;
+}
+
+.add_event_labels{
+    // display: table-cell;
+    // vertical-align: baseline;
+    width: 95%;
+    text-align: left;
+}
+
+.add_event_labels input{
+    text-align: left;
+}
+
+.add_event_labels label{
+    text-align: right;
+    display: inline-block;
+    width: 20%;
+}

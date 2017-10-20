@@ -1,0 +1,14 @@
+<h2>Edit <%= @event.name %></h2>
+
+<form action="/events/<%= @event.id %>" method="post">
+    <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+    <input type="hidden" name="_method" value="patch">
+    Name: <input type="text" name="up_event[name]" value="<%= @event.name %>"><br>
+    Date: <input type="date" name="up_event[date]" value="<%= @event.date %>"><br>
+    Location: <input type="text" name="up_event[city]" value="<%= @event.city %>"> <select name="up_event[state]">
+        <option value="CA" <% if @event.state == 'CA' %> selected <% end %>>CA</option>
+        <option value="OR" <% if @event.state == 'OR' %> selected <% end %>>OR</option>
+        <option value="WA" <% if @event.state == 'WA' %> selected <% end %>>WA</option>
+    </select>
+    <input class="function" type="submit" name="" value="Update Event">
+</form>

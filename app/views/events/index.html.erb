@@ -1,0 +1,102 @@
+<h1>Welcome <%= current_user.first_name %></h1>
+<a href="/users/<%= current_user.id %>/edit">Edit Profile</a>  <a href="/">Logout</a>
+<br>
+<br>
+<h2>Here are some of the events happening in your state!</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Host</th>
+        <th>Action</th>
+    </tr>
+      <% if @events_in_state %>
+        <% @events_in_state.each do |event| %>
+            <tr>
+                <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+                <td><%= event.date.strftime("%B %-d, %Y") %></td>
+                <td><%= event.city %></td>
+                <td><%= event.user.first_name %></td>
+
+                <% if current_user == event.user %>
+                <td><a href="/events/<%= event.id %>/edit">Edit </a><form action="/events" method="post">
+                    <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+                    <input type="hidden" name="_method" value="delete">
+                    <input class="link" type="submit" name="" value="Delete">
+                </form></td>
+
+                <% elsif event.user_attendees.include?(current_user) %>
+                <td>Joining <form action="/events/<%= event.id %>/attendee" method="post">
+                    <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+                    <input type="hidden" name="_method" value="delete">
+                    <input class="link" type="submit" name="" value="Cancel">
+                </form></td>
+
+                <% else %>
+                <td><a href="/events/<%= event.id %>/attendee">Join</a></td>
+                <% end %>
+            </tr>
+        <% end %>
+    <% end %>
+</table>
+
+
+<br>
+<br>
+<br>
+<h2> Here are some events happening in other states:</h2>
+<table>
+<tr>
+    <th>Name</th>
+    <th>Date</th>
+    <th>Location</th>
+    <th>State</th>
+    <th>Host</th>
+    <th>Action</th>
+</tr>
+<% if @events_out %>
+    <% @events_out.each do |event| %>
+        <tr>
+            <td><a href="/events/<%= event.id %>"><%= event.name %></a></td>
+            <td><%= event.date.strftime("%B %-d, %Y") %></td>
+            <td><%= event.city %></td>
+            <td><%= event.state %></td>
+            <td><%= event.user.first_name %></td>
+            <% if current_user == event.user %>
+            <td>Joining <form action="/events/<%= event.id %>/attendee" method="post">
+            <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+            <input type="hidden" name="_method" value="delete">
+            <input class="link" type="submit" name="" value="Cancel">
+        </form></td>        
+            <% elsif event.user_attendees.include?(current_user) %>
+            <td>Joining <form action="/events/<%= event.id %>/attendee" method="post">
+                <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+                <input type="hidden" name="_method" value="delete">
+                <input class="link" type="submit" name="" value="Cancel">
+            </form></td>
+
+            <% else %>
+            <td><a href="/events/<%= event.id %>/attendee">Join</a></td>
+            <% end %></td>
+        </tr>
+    <% end %>
+<% end %>
+</table>
+
+<div class="add_event_box">
+    <h3>Add Event</h3>
+    <form action="/events" method="post">
+        <input type="hidden" name="authenticity_token" value="<% form_authenticity_token %>">
+        <div class="add_event_labels">
+            <label for="event[event_name]">Name:</label> <input type="text" name="event[event_name]" value=""><br>
+            <label for="event[event_date]">Date:</label> <input type="date" name="event[event_date]" value="<%=Date.today%>"><br>
+            <label for="event[event_city]">Location:</label> <input type="text" name="event[event_city]" value=""> <select name="event[event_state]">
+                <option value="CA">CA</option>
+                <option value="OR">OR</option>
+                <option value="WA">WA</option>
+            </select><br>
+        </div>
+        <input class="function" type="submit" name="" value="Add Event"><br>
+    </form>
+</div>
